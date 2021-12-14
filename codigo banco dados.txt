@@ -1,0 +1,64 @@
+ATIVIDADE 13/12
+
+CREATE TABLE editora(
+    ideditora int PRIMARY KEY AUTO_INCREMENT not null,
+    nome varchar (255) not null,
+    cidade varchar (255) not null
+);
+
+CREATE TABLE genero( 
+    idgenero int PRIMARY KEY AUTO_INCREMENT NOT NULL, 
+    nome varchar (255) 
+);
+
+CREATE TABLE perfil(
+    idperfil int PRIMARY KEY AUTO_INCREMENT NOT NULL, 
+    nome varchar (255),
+    limite int,
+    prazo int 
+);
+
+CREATE TABLE livro( 
+    isbn varchar (45) PRIMARY KEY, 
+    fk_genero_idgenero int, 
+    fK_editora_ideditora int, 
+    titulo varchar (255), 
+    edicao int, 
+    volume int, 
+    CONSTRAINT fk_genero_idgenero FOREIGN KEY (fk_genero_idgenero) REFERENCES genero(idgenero), 
+    CONSTRAINT fk_editora_ideditora FOREIGN KEY (fk_editora_ideditora) REFERENCES editora(ideditora) 
+);
+
+CREATE TABLE autoria( 
+    fk_livro_isbn varchar (45), 
+    fk_idautor int, 
+    FOREIGN KEY (fk_livro_isbn) REFERENCES livro(isbn), 
+    FOREIGN KEY (fk_idautor) REFERENCES autor(idautor), 
+    PRIMARY KEY (fk_livro_isbn, fk_idautor) 
+);
+
+CREATE TABLE exemplar (
+    idexemplar int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    fk_livro_isbn varchar (45),
+    status ENUM('0','1','2'),
+    FOREIGN KEY (fk_livro_isbn) REFERENCES livro(isbn)
+);
+
+CREATE TABLE usuario(
+    cpf varchar (11) PRIMARY KEY,
+    fk_idperfil int,
+    nome varchar (255),
+    endereco varchar (255),
+    telefone varchar (255),
+    email varchar (255),
+    FOREIGN KEY (fk_idperfil) REFERENCES perfil(idperfil)
+);
+
+CREATE TABLE emprestimo(
+    fk_exemplar_livro_isbn varchar (45),
+    fk_exemplar_idexemplar int,
+    fk_usuario_cpf varchar (11),
+    data_emprestimo DATE PRIMARY KEY,
+    data_entrega DATE,
+    prazo int
+);
