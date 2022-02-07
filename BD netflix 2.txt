@@ -1,0 +1,83 @@
+NOVA BASE DE DADOS, após perder todos os dados! 
+
+CREATE DATABASE netflix_2
+
+CREATE TABLE usuario(
+    email varchar (100) PRIMARY KEY NOT null,
+    senha int,
+    nome varchar (45),
+    telefone int,
+    cpf varchar (11),
+    endereço varchar (100),
+    fk_cartao_u varchar (20)
+    );
+
+CREATE TABLE cartao(
+    numero varchar (20) PRIMARY KEY not null,
+    nome varchar (45)
+    );   
+
+* adicionando foreign key a uma coluna de tabela ja existente
+
+ALTER TABLE usuario ADD CONSTRAINT fk_cartao_u FOREIGN KEY (fk_cartao_u) REFERENCES cartao(numero);
+
+CREATE TABLE cobrança(
+    mes date,
+    sstatus varchar (20),
+    fk_cartao_c varchar (20), 
+    FOREIGN KEY (fk_cartao_c) REFERENCES cartao(numero)
+    );
+
+CREATE TABLE series(
+    serie_id int PRIMARY KEY,
+    temporada int,
+    episodio int,
+    prox_ep int,
+    duraçao float,
+    ano_duraçao date
+    );
+
+CREATE TABLE filmes(
+    filmes_id int PRIMARY KEY,
+    ano_produçao date,
+    duraçao float,
+    ano_duraçao date
+    );
+
+CREATE TABLE documentarios(
+    documentarios_id int PRIMARY KEY,
+    nome_produtora varchar (20),
+    duraçao float,
+    ano_produção date
+    );
+
+ALTER TABLE filmes DROP COLUMN ano_duraçao
+
+ALTER TABLE series DROP COLUMN ano_duraçao
+
+* atentar para as palavras ESCRITAS
+
+CREATE TABLE atores(
+    atores_id int PRIMARY KEY,
+    data_nascimento date,
+    local_nascimento varchar (45),
+    fk_atores_series int,
+    fk_atores_filmes int,
+    fk_atores_documentarios int,
+    FOREIGN KEY (fk_atores_series) REFERENCES series(serie_id),
+    FOREIGN KEY (fk_atores_filmes) REFERENCES filmes(filmes_id),
+    FOREIGN KEY (fk_atores_documentarios) REFERENCES documentarios(documentarios_id)
+    );
+
+CREATE TABLE assistir(
+    usuario_a varchar (100),
+    avaliaçao int,
+    fk_serie_id int,
+    fk_filmes_id int,
+    fk_documentarios_id int,
+    fk_atores_id int,
+    FOREIGN KEY (fk_serie_id) REFERENCES series(serie_id),
+    FOREIGN KEY (fk_filmes_id) REFERENCES filmes(filmes_id),
+    FOREIGN KEY (fk_documentarios_id) REFERENCES documentarios(documentarios_id),
+    FOREIGN KEY (fk_atores_id) REFERENCES atores(atores_id)
+    );
